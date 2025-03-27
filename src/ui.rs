@@ -28,7 +28,8 @@ pub fn show(app: &mut TuringApp, ctx: &egui::Context) {
             ..Default::default()
         })
         .show_inside(ui, |ui| {
-
+            ribbon::show(app, ui);
+            control::show(app, ui);
         });
 
 
@@ -39,6 +40,7 @@ pub fn show(app: &mut TuringApp, ctx: &egui::Context) {
         })
         .show_inside(ui, |ui| {
 
+            // Graph pannel, resizable
             SidePanel::left(Id::new("Graph"))
             .frame(Frame {
                 ..Default::default()
@@ -47,6 +49,7 @@ pub fn show(app: &mut TuringApp, ctx: &egui::Context) {
                 graph::show(app, ui);
             });
 
+            // Code pannel, taking the space remaining
             CentralPanel::default()
             .frame(Frame {
                 ..Default::default()
