@@ -22,16 +22,22 @@ impl Constant {
     pub const TEXT_SIZE: f32 = 16.0;
     pub const SMALL_TEXT_SIZE: f32 = 12.0;
 
-    pub fn CODE_FONT() -> FontId {
+    pub fn code_font() -> FontId {
         FontId {
             family: egui::FontFamily::Name("Roboto".into()),
             size: Constant::TEXT_SIZE,
         }
     }
-    pub fn SMALL_FONT() -> FontId {
+    pub fn small_font() -> FontId {
         FontId {
             family: egui::FontFamily::Name("Roboto".into()),
             size: Constant::SMALL_TEXT_SIZE,
+        }
+    }
+    pub fn ribbon_font() -> FontId {
+        FontId {
+            family: egui::FontFamily::Name("Roboto".into()),
+            size: Constant::TEXT_SIZE,
         }
     }
 
@@ -42,7 +48,7 @@ impl Constant {
     pub const MAX_FORCE: f32 = 100000.0;
 
     // Ribbon
-    pub const RIBBON_SQUARE_SIZE: f32 = 35.0;
+    pub const SQUARE_SIZE: f32 = 30.0;
     pub const VERTICAL_SPACE: f32 = 8.0;
     pub const HORIZONTAL_SPACE: f32 = 5.0;
 

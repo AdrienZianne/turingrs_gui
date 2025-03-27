@@ -1,4 +1,5 @@
-use egui::{CentralPanel, Frame, Id, SidePanel, TopBottomPanel, Ui};
+use constant::Constant;
+use egui::{CentralPanel, Frame, Id, Margin, SidePanel, TopBottomPanel, Ui};
 
 use crate::TuringApp;
 
@@ -18,6 +19,9 @@ pub fn show(app: &mut TuringApp, ctx: &egui::Context) {
     // Main panel, take all available space
     CentralPanel::default()
     .frame(Frame {
+        outer_margin: Margin::same(0),
+        inner_margin: Margin::same(10),
+        fill: Constant::BACKGROUND,
         ..Default::default()
     })
     .show(ctx, |ui| {
@@ -28,6 +32,7 @@ pub fn show(app: &mut TuringApp, ctx: &egui::Context) {
             ..Default::default()
         })
         .show_inside(ui, |ui| {
+            ui.style_mut().spacing.item_spacing = (10.0,10.0).into();
             ribbon::show(app, ui);
             control::show(app, ui);
         });
@@ -43,6 +48,11 @@ pub fn show(app: &mut TuringApp, ctx: &egui::Context) {
             // Graph pannel, resizable
             SidePanel::left(Id::new("Graph"))
             .frame(Frame {
+                outer_margin: Margin {
+                    top: 10,
+                    ..Default::default()
+                },
+                inner_margin: Margin::same(0),
                 ..Default::default()
             })
             .show_inside(ui, |ui| {
