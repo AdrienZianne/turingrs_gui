@@ -2,11 +2,15 @@ use std::collections::BTreeMap;
 
 use egui::{FontData, FontDefinitions, FontFamily};
 
+use crate::ui;
 
+
+/// The application data, not refresh after each draw
 pub struct TuringApp {
 
 }
 
+/// Default implementation of TuringApp
 impl Default for TuringApp {
     fn default() -> Self {
         Self {
@@ -15,6 +19,7 @@ impl Default for TuringApp {
     }
 }
 
+/// Global setting of egui
 impl TuringApp {
     /// Called once before the first frame.
     pub fn new(cc: &eframe::CreationContext<'_>) -> Self {
@@ -27,10 +32,11 @@ impl TuringApp {
     }
 }
 
+/// Update loop
 impl eframe::App for TuringApp {
 
-    fn update(&mut self, ctx: &egui::Context, frame: &mut eframe::Frame) {
-        
+    fn update(&mut self, ctx: &egui::Context, _frame: &mut eframe::Frame) {
+        ui::show(self, ctx);
     }
 }
 
