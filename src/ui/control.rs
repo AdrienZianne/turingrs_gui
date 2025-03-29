@@ -21,6 +21,9 @@ pub fn show(app: &mut TuringApp, ui: &mut Ui) {
     });
 }
 
+/// The input part manage the input passed to the turing machine
+/// The turing machine execution update only when the button is clicked.
+/// If the button is clicked during execution the turing machine execution reset.
 fn input(app: &mut TuringApp, ui: &mut Ui) {
     Flex::horizontal()
         .h_full()
@@ -37,6 +40,11 @@ fn input(app: &mut TuringApp, ui: &mut Ui) {
         });
 }
 
+/// The controls part manage the execution of the turing machine.
+/// - The play button start to compute the steps at regular interval until the final step.
+/// - The pause button stop the automatic computation of steps.
+/// - The next button compute the next step.
+/// - The reset button reset the turing machine execution to the initial state.
 fn control_buttons(app: &mut TuringApp, ui: &mut Ui) {
     Flex::horizontal()
         .h_full()
@@ -77,6 +85,8 @@ fn control_buttons(app: &mut TuringApp, ui: &mut Ui) {
         });
 }
 
+/// The result part contain the number of steps the algorithme used to get to the current state
+/// and when there is no step left the result : Accepted or Rejected
 fn result(app: &mut TuringApp, ui: &mut Ui) {
     Flex::horizontal()
         .h_full()
