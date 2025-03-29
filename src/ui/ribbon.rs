@@ -7,6 +7,9 @@ use crate::TuringApp;
 
 use super::constant::Constant;
 
+/// This module display the ribbons of the turing machine dynamically.
+/// The square stay still, only the character change position.
+/// Every long computation are handmade and can't be altered without risk of breaking
 pub fn show(app: &mut TuringApp, ui: &mut Ui) {
     let ribbons_count: u8 = app.turing.turing_machine.k+1;
 

@@ -10,7 +10,10 @@ use crate::ui;
 /// The application data, not refresh after each draw
 pub struct TuringApp {
     pub turing: TuringMachineExecutor,
-    pub current_step: TuringExecutionStep
+    pub current_step: TuringExecutionStep,
+    pub word_input: String,
+    pub count: u8,
+    pub is_accepted: Option<bool>
 }
 
 /// Default implementation of TuringApp
@@ -27,7 +30,11 @@ impl Default for TuringApp {
         // Implement the TuringApp
         Self {
             turing: turing_executor,
-            current_step : initial_turing_step
+            current_step : initial_turing_step,
+            word_input: "".to_string(),
+            count: 0,
+            is_accepted: None,
+            
         }
     }
 }
@@ -40,7 +47,7 @@ impl TuringApp {
         // `cc.egui_ctx.set_visuals` and `cc.egui_ctx.set_fonts`.
 
         cc.egui_ctx.set_debug_on_hover(true);
-        
+
         load_font(cc);
 
         Default::default()
