@@ -23,7 +23,7 @@ pub fn show(app: &mut TuringApp, ui: &mut Ui) {
             // Vertical box for ribbons
             ui.vertical(|ui| {
                 // Spacing between the item
-                ui.spacing_mut().item_spacing = (5.0, 8.0).into();
+                ui.spacing_mut().item_spacing = (Constant::HORIZONTAL_SPACE, Constant::VERTICAL_SPACE).into();
 
                 let available_width = ui.available_width();
 
@@ -118,7 +118,7 @@ fn draw_square(ui: &mut Ui, t: char) {
             rect,
             Label::new(
                 RichText::new(t)
-                    .font(Constant::ribbon_font())
+                    .font(Constant::default_font())
                     .color(Color32::WHITE),
             ),
         );

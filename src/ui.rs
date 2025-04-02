@@ -1,5 +1,5 @@
 use constant::Constant;
-use egui::{CentralPanel, Frame, Id, Margin, SidePanel, TopBottomPanel, Ui};
+use egui::{CentralPanel, Frame, Id, Margin, SidePanel, TopBottomPanel};
 
 use crate::TuringApp;
 
@@ -10,8 +10,8 @@ mod control;
 mod utils;
 mod component;
 mod graph;
-mod constant;
-mod turing;
+pub mod constant;
+pub mod turing;
 
 
 pub fn show(app: &mut TuringApp, ctx: &egui::Context) {
@@ -41,17 +41,19 @@ pub fn show(app: &mut TuringApp, ctx: &egui::Context) {
         // The remainder space available for graph and code section
         CentralPanel::default()
         .frame(Frame {
+            outer_margin: Margin {
+                top: 10,
+                ..Default::default()
+            },
             ..Default::default()
         })
         .show_inside(ui, |ui| {
 
             // Graph pannel, resizable
             SidePanel::left(Id::new("Graph"))
+            .default_width(ui.available_width()/2.0)
             .frame(Frame {
-                outer_margin: Margin {
-                    top: 10,
-                    ..Default::default()
-                },
+                fill: Constant::BACKGROUND_2,
                 inner_margin: Margin::same(0),
                 ..Default::default()
             })
