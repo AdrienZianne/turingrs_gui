@@ -1,5 +1,5 @@
 use constant::Constant;
-use egui::{CentralPanel, Frame, Id, Margin, SidePanel, TopBottomPanel};
+use egui::{CentralPanel, CornerRadius, Frame, Id, Margin, SidePanel, Stroke, TopBottomPanel};
 
 use crate::TuringApp;
 
@@ -52,6 +52,7 @@ pub fn show(app: &mut TuringApp, ctx: &egui::Context) {
             // Graph pannel, resizable
             SidePanel::left(Id::new("Graph"))
             .default_width(ui.available_width()/2.0)
+            .max_width(ui.available_width()-200.0)
             .frame(Frame {
                 fill: Constant::BACKGROUND_2,
                 inner_margin: Margin::same(0),
@@ -64,6 +65,10 @@ pub fn show(app: &mut TuringApp, ctx: &egui::Context) {
             // Code pannel, taking the space remaining
             CentralPanel::default()
             .frame(Frame {
+                stroke: Stroke::new(1.0, Constant::BORDER),
+                outer_margin: Margin::symmetric(2, 0),
+                inner_margin: Margin::same(10),
+                corner_radius: CornerRadius::same(5),
                 ..Default::default()
             })
             .show_inside(ui, |ui| {

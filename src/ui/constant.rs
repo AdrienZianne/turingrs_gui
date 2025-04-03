@@ -41,7 +41,7 @@ impl Constant {
 
     pub fn code_font() -> FontId {
         FontId {
-            family: egui::FontFamily::Name("Roboto".into()),
+            family: egui::FontFamily::Name("RobotoMono-regular".into()),
             size: Constant::TEXT_SIZE,
         }
     }

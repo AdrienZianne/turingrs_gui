@@ -1,7 +1,9 @@
-use std::{cell::RefCell, collections::{BTreeMap, HashMap}};
+use std::{collections::{BTreeMap, HashMap}, path::PathBuf};
 
 use egui::{FontData, FontDefinitions, FontFamily, Rect};
 use egui_extras::install_image_loaders;
+use poll_promise::Promise;
+use rfd::FileHandle;
 use turingrs::{turing_machine::{TuringExecutionStep, TuringMachine, TuringMachineExecutor}, turing_state::{TuringDirection, TuringTransition}};
 
 use crate::ui::{self, turing::{State, Transition}};
@@ -17,6 +19,9 @@ pub struct TuringApp {
     pub graph_rect: Rect,
     pub states: HashMap<u8, State>,
     pub selection: Selection,
+    pub code: String,
+    pub promise: Option<Promise<Option<PathBuf>>>,
+    pub promise_wasm: Option<Promise<Option<FileHandle>>>
 }
 
 #[derive(Default)]
@@ -63,7 +68,10 @@ impl Default for TuringApp {
             is_accepted: None,
             graph_rect: Rect::ZERO,
             states: states,
-            selection: Selection::default()
+            selection: Selection::default(),
+            code: "".to_string(),
+            promise: None,
+            promise_wasm: None,
         }
     }
 
