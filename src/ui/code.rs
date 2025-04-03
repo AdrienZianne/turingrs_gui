@@ -25,11 +25,11 @@ pub fn show(app: &mut TuringApp, ui: &mut Ui) {
                         let load_file_button = button(flex.style_mut(), "Load file");
                         let load_graph_button = button(flex.style_mut(), "Load Graph");
                         if flex.add(item(), compile).clicked() {
-                            // compile
+                            app.compile();
                         }
 
                         if flex.add(item(), load_graph_button).clicked() {
-                            // graph to code algorithm
+                            app.graph_to_code();
                         }
 
                         let res = flex.add(item(), load_file_button);
@@ -150,8 +150,10 @@ fn load_file(app: &mut TuringApp, res: Response) {
 
     if let Some(promise) = &app.promise {
         if let Some(path) = (promise).ready() {
-            app.code = fs::read_to_string(path.as_ref().unwrap()).expect("cannot read file");
-            app.promise = None;
+            if let Some(path) = path {
+                app.code = fs::read_to_string(path).expect("cannot read file");
+                app.promise = None;
+            }
         } else {
         }
     }

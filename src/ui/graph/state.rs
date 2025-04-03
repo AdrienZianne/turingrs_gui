@@ -50,6 +50,7 @@ pub fn draw_states(app: &mut TuringApp, ui: &mut Ui) {
                         text: transition_string,
                         id: transition_id,
                         parent_id: selected,
+                        target_id: i
                     }
                 );
 

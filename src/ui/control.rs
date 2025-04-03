@@ -1,4 +1,4 @@
-use egui::Ui;
+use egui::{Frame, Margin, Ui};
 use egui_flex::{Flex, FlexAlign, FlexJustify, item};
 use turingrs::turing_machine::TuringExecutor;
 
@@ -25,19 +25,23 @@ pub fn show(app: &mut TuringApp, ui: &mut Ui) {
 /// The turing machine execution update only when the button is clicked.
 /// If the button is clicked during execution the turing machine execution reset.
 fn input(app: &mut TuringApp, ui: &mut Ui) {
-    Flex::horizontal()
-        .h_full()
-        .align_items(FlexAlign::Center)
-        .show(ui, |flex| {
-            let field = text_edit_single(flex.style_mut(), &mut app.word_input);
-            let update = button(flex.style_mut(), "Update");
+    Frame::new()
+    .inner_margin(Margin { left: 1, ..Default::default()})
+    .show(ui, |ui| {
+        Flex::horizontal()
+            .h_full()
+            .align_items(FlexAlign::Center)
+            .show(ui, |flex| {
+                let field = text_edit_single(flex.style_mut(), &mut app.word_input);
+                let update = button(flex.style_mut(), "Update");
 
-            flex.add(item().shrink(), field);
+                flex.add(item().shrink(), field);
 
-            if flex.add(item(), update).clicked() {
-                // update word here
-            }
-        });
+                if flex.add(item(), update).clicked() {
+                    app.update();
+                }
+            });
+    });
 }
 
 /// The controls part manage the execution of the turing machine.
@@ -134,4 +138,6 @@ fn next(app: &mut TuringApp) {
 }
 
 /// TODO see how to centralize these methods, maybe a new files or in a new impl in app.rs
-fn reset(app: &mut TuringApp) {}
+fn reset(app: &mut TuringApp) {
+    app.update();
+}

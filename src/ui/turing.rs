@@ -18,7 +18,8 @@ pub struct State {
 pub struct Transition {
     pub text: String,
     pub id: u8,
-    pub parent_id : u8
+    pub parent_id : u8,
+    pub target_id : u8,
 }
 
 impl State {

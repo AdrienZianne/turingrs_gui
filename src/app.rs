@@ -1,12 +1,14 @@
-use std::{collections::{BTreeMap, HashMap}, path::PathBuf};
+use std::{collections::{hash_map::Entry, BTreeMap, HashMap}, path::PathBuf};
 
-use egui::{FontData, FontDefinitions, FontFamily, Rect};
+use egui::{FontData, FontDefinitions, FontFamily, Pos2, Rect};
 use egui_extras::install_image_loaders;
+use itertools::Itertools;
 use poll_promise::Promise;
+use rand::random_range;
 use rfd::FileHandle;
-use turingrs::{turing_machine::{TuringExecutionStep, TuringMachine, TuringMachineExecutor}, turing_state::{TuringDirection, TuringTransition}};
+use turingrs::{parser::parse_turing_machine, turing_machine::{TuringExecutionStep, TuringMachine, TuringMachineExecutor}, turing_state::{TuringDirection, TuringTransition}};
 
-use crate::ui::{self, turing::{State, Transition}};
+use crate::ui::{self, constant::Constant, turing::{State, Transition}};
 
 
 /// The application data, not refresh after each draw
@@ -51,7 +53,8 @@ impl Default for TuringApp {
         states.get_mut(&0).unwrap().transitions.push(Transition {
             id: t1,
             parent_id: 0,
-            text: turing_machine.states[0].transitions[t1 as usize].to_string()
+            text: turing_machine.states[0].transitions[t1 as usize].to_string(),
+            target_id: 1
         });
 
         let (turing_executor, initial_turing_step) = TuringMachineExecutor::new(
@@ -91,6 +94,84 @@ impl TuringApp {
 
         Default::default()
     }
+
+    pub fn compile(&mut self) {
+
+        let new_turing_machine = parse_turing_machine(self.code.to_string()).unwrap();
+        (self.turing, self.current_step) = TuringMachineExecutor::new(new_turing_machine, self.word_input.to_string()).unwrap();
+        self.code_to_graph();
+    }
+
+    pub fn graph_to_code(&mut self) {
+
+        let mut final_code = "".to_string();
+        
+        let mut transitions_hashmap: HashMap<(String, String), Vec<&Transition>> = HashMap::new();
+
+        // iterate all states to find transitions
+        for (index, state) in self.states.iter() {
+
+            // each state hold all transitions of which its the source
+            for transition in state.transitions.iter() {
+
+                // get TuringTransition to acquire the nex state id
+                let target_state_name = &self.turing.turing_machine
+                    .states[transition.target_id as usize].name;
+
+                // if the value exist, add to the vector, if not create a new pair key/value
+                match transitions_hashmap.entry((state.name.clone(), target_state_name.to_string())) {
+                    Entry::Occupied(mut e) => {
+                        e.get_mut().push(transition);
+                    }
+                    Entry::Vacant(e) => {
+                        e.insert(vec![transition]);
+                    }
+                }
+            }
+        }
+
+        final_code = transitions_hashmap.iter()
+            .map(|(i,ts)| {
+                format!("q_{} {{{}}} q_{};",
+                i.0,
+                ts.iter().map(|f| &f.text).join("\n | "),
+                i.1)
+            }).join("\n\n");
+
+        self.code = final_code;
+        
+    }
+
+    pub fn update(&mut self) {
+        (self.turing, self.current_step) = TuringMachineExecutor::new(self.turing.turing_machine.to_owned(), self.word_input.to_string()).unwrap();
+    }
+
+    pub fn code_to_graph(&mut self) {
+
+        self.states = HashMap::new();
+
+        for (state_id, state) in self.turing.turing_machine.states.iter_mut().enumerate() {
+
+            let mut transitions = vec![];
+            for (transition_id, transition) in state.transitions.iter().enumerate() {
+                transitions.push(Transition {
+                    text: transition.to_string(),
+                    id: transition_id as u8,
+                    parent_id: state_id as u8,
+                    target_id: transition.index_to_state
+                });
+            }
+
+            self.states.insert(state_id as u8, State {
+                name: state.name.to_string(),
+                position: Pos2::new(random_range(-100.0..100.0), random_range(-100.0..100.0)),
+                id: state_id as u8,
+                color: Constant::PRIMARY_COLOR,
+                transitions: transitions,
+            });
+        }
+    }
+
 }
 
 /// Update loop
